@@ -53,6 +53,7 @@ async def update_user_full_crud(
 
 
 async def delete_user_crud(user_id: int, session: AsyncSession):
-    user = await session.get(UserOrm, user_id)
+    user = await user_presence_crud(user_id, session)
     await session.delete(user)
     await session.commit()
+    return {"message": "Пользователь удален"}

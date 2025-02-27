@@ -34,7 +34,9 @@ async def get_all_users_pagination(
 
 @router.patch("/{user_id}", response_model=ResponseUser)
 async def update_user_partial(
-    user: UpdateUserPartial, user_id: int, session: AsyncSession = Depends(get_session)
+    user: UpdateUserPartial,
+    user_id: int = Path(..., description="ID Пользователя"),
+    session: AsyncSession = Depends(get_session),
 ):
     return await crud.update_user_partial_crud(
         user=user, user_id=user_id, session=session

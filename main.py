@@ -5,6 +5,8 @@ from models.base import Base
 from contextlib import asynccontextmanager
 from database import engine
 from routers.user import router as user_router
+from routers.task import router as task_router
+from routers.tag import router as tag_router
 
 
 # функция для работы с БД
@@ -18,7 +20,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(user_router)
-
+app.include_router(task_router)
+app.include_router(tag_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
