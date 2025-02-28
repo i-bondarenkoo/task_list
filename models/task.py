@@ -16,7 +16,7 @@ class TaskOrm(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(String(100))
-
+    # ondelete="CASCADE"
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
     user: Mapped["UserOrm"] = relationship("UserOrm", back_populates="tasks")
