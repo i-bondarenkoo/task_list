@@ -3,7 +3,12 @@ from fastapi import Depends, Query, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_session
 from fastapi import APIRouter
-from schemas.tag import CreateTag, ResponseTag, UpdatePartialTag
+from schemas.tag import (
+    CreateTag,
+    ResponseTag,
+    UpdatePartialTag,
+    ResponseTagWithRelationship,
+)
 
 router = APIRouter(prefix="/tags", tags=["Tags"])
 
@@ -13,7 +18,7 @@ async def create_tag(tag: CreateTag, session: AsyncSession = Depends(get_session
     return await crud.create_tag_crud(tag=tag, session=session)
 
 
-@router.get("/{tag_id}", response_model=ResponseTag)
+@router.get("/{tag_id}", response_model=ResponseTagWithRelationship)
 async def get_tag_by_id(
     tag_id: int = Path(..., description="ID Тега"),
     session: AsyncSession = Depends(get_session),
@@ -21,7 +26,7 @@ async def get_tag_by_id(
     return await crud.get_tag_by_id_crud(tag_id=tag_id, session=session)
 
 
-@router.get("/", response_model=list[ResponseTag])
+@router.get("/", response_model=list[ResponseTagWithRelationship])
 async def get_list_tags(
     session: AsyncSession = Depends(get_session),
     start: int = Query(0, description="Начальная позиция"),
