@@ -1,7 +1,12 @@
 from fastapi import APIRouter, Depends, Path, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_session
-from schemas.task import CreateTask, ResponseTask, UpdatePartialTask
+from schemas.task import (
+    CreateTask,
+    ResponseTask,
+    UpdatePartialTask,
+    ResponseTaskWithRelationship,
+)
 import crud
 
 
@@ -16,7 +21,7 @@ async def create_task(task: CreateTask, session: AsyncSession = Depends(get_sess
     return await crud.create_task_user(task=task, session=session)
 
 
-@router.get("/{task_id}", response_model=ResponseTask)
+@router.get("/{task_id}", response_model=ResponseTaskWithRelationship)
 async def get_task_by_id(
     task_id: int = Path(..., description="ID Задачи"),
     session: AsyncSession = Depends(get_session),
@@ -24,7 +29,7 @@ async def get_task_by_id(
     return await crud.get_task_by_id_crud(task_id=task_id, session=session)
 
 
-@router.get("/", response_model=list[ResponseTask])
+@router.get("/", response_model=list[ResponseTaskWithRelationship])
 async def get_list_task(
     session: AsyncSession = Depends(get_session),  # Подключаем сессию через Depends
     start: int = Query(0, description="С какого ID начать список"),

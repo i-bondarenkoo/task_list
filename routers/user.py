@@ -1,7 +1,13 @@
 from fastapi import APIRouter, Depends, Path, Query, HTTPException
 import crud
 from database import get_session
-from schemas.user import CreateUser, ResponseUser, UpdateUserFull, UpdateUserPartial
+from schemas.user import (
+    CreateUser,
+    ResponseUser,
+    UpdateUserFull,
+    UpdateUserPartial,
+    ResponseUserWithRelationship,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -12,7 +18,7 @@ async def create_user(user: CreateUser, session: AsyncSession = Depends(get_sess
     return await crud.create_user_crud(user=user, session=session)
 
 
-@router.get("/{user_id}", response_model=ResponseUser)
+@router.get("/{user_id}", response_model=ResponseUserWithRelationship)
 async def get_user_by_id(
     user_id: int = Path(..., description="ID Пользователя"),
     session: AsyncSession = Depends(get_session),
@@ -20,7 +26,7 @@ async def get_user_by_id(
     return await crud.get_user_by_id_crud(user_id=user_id, session=session)
 
 
-@router.get("/", response_model=list[ResponseUser])
+@router.get("/", response_model=list[ResponseUserWithRelationship])
 async def get_all_users_pagination(
     start: int = Query(description="Начальный индекс"),
     stop: int = Query(description="Конечный индекс"),

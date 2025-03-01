@@ -4,6 +4,8 @@ from sqlalchemy import select
 from schemas.task import CreateTask, UpdatePartialTask
 from crud.user import user_presence_crud
 from fastapi import HTTPException
+from sqlalchemy.orm import selectinload
+from models.tag import TagOrm
 
 
 async def create_task_user(task: CreateTask, session: AsyncSession):
@@ -23,7 +25,18 @@ async def task_presence_crud(task_id: int, session: AsyncSession):
 
 
 async def get_task_by_id_crud(task_id: int, session: AsyncSession):
-    return await task_presence_crud(task_id=task_id, session=session)
+    task = await task_presence_crud(task_id, session)
+    stmt = (
+        select(TaskOrm)
+        .where(TaskOrm.id == task_id)
+        .options(
+            # selectinload(TaskOrm.user),  # Загружаем данные о пользователе
+            selectinload(TaskOrm.tags),
+        )
+    )
+    result = await session.execute(stmt)
+    task_with_tag = result.scalars().first()
+    return task_with_tag
 
 
 async def get_list_pagination_task_crud(
@@ -31,7 +44,15 @@ async def get_list_pagination_task_crud(
 ):
     if start >= stop:
         raise HTTPException(status_code=400, detail="Неверные значения пагинации")
-    stmt = select(TaskOrm).offset(start).limit(stop - start)
+    stmt = (
+        select(TaskOrm)
+        .options(
+            # selectinload(TaskOrm.user),
+            selectinload(TaskOrm.tags),
+        )
+        .offset(start)
+        .limit(stop - start)
+    )
     result = await session.execute(stmt)
     return result.scalars().all()
 

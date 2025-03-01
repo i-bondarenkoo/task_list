@@ -1,4 +1,8 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from schemas.task import ResponseTask, ResponseTaskWithRelationship
 
 
 class CreateUser(BaseModel):
@@ -10,6 +14,15 @@ class CreateUser(BaseModel):
 class ResponseUser(CreateUser):
     id: int
 
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ResponseUserWithRelationship(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: EmailStr
+    tasks: list["ResponseTaskWithRelationship"]
     model_config = ConfigDict(from_attributes=True)
 
 

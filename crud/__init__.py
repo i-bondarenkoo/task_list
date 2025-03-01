@@ -18,6 +18,8 @@ __all__ = (
     "update_partial_tag_crud",
     "delete_tag_crud",
     "add_task_tag_crud",
+    "get_list_tags_for_task_crud",
+    "get_list_task_for_tag_crud",
 )
 from crud.user import (
     create_user_crud,
@@ -45,4 +47,6 @@ from crud.tag import (
 )
 from crud.task_tag import (
     add_task_tag_crud,
+    get_list_tags_for_task_crud,
+    get_list_task_for_tag_crud,
 )

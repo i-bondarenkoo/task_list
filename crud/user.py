@@ -1,8 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.user import CreateUser, UpdateUserFull, UpdateUserPartial
-from fastapi import Path, Query, HTTPException
+from fastapi import HTTPException
 from models.user import UserOrm
+from models.task import TaskOrm
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 
 async def create_user_crud(user: CreateUser, session: AsyncSession):
@@ -21,11 +23,24 @@ async def user_presence_crud(user_id: int, session: AsyncSession):
 
 
 async def get_user_by_id_crud(user_id: int, session: AsyncSession):
-    return await user_presence_crud(user_id, session)
+    user = await user_presence_crud(user_id, session)
+    stmt = (
+        select(UserOrm)
+        .where(UserOrm.id == user_id)
+        .options(selectinload(UserOrm.tasks).selectinload(TaskOrm.tags))
+    )
+    result = await session.execute(stmt)
+    user_with_tasks = result.scalars().first()
+    return user_with_tasks
 
 
 async def get_list_users_crud(session: AsyncSession, start: int, stop: int):
-    stmt = select(UserOrm).offset(start).limit(stop - start)
+    stmt = (
+        select(UserOrm)
+        .options(selectinload(UserOrm.tasks).selectinload(TaskOrm.tags))
+        .offset(start)
+        .limit(stop - start)
+    )
     result = await session.execute(stmt)
     return result.scalars().all()
 
