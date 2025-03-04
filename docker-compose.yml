@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432" # Внешний порт 5433(слева), внутренний остается 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: task
