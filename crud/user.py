@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from models.user import UserOrm
 from models.task import TaskOrm
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 
 
 async def create_user_crud(user: CreateUser, session: AsyncSession):
@@ -38,6 +38,7 @@ async def get_list_users_crud(session: AsyncSession, start: int, stop: int):
     stmt = (
         select(UserOrm)
         .options(selectinload(UserOrm.tasks).selectinload(TaskOrm.tags))
+        .order_by(UserOrm.id)
         .offset(start)
         .limit(stop - start)
     )

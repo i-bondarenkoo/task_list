@@ -11,15 +11,16 @@ from routers.task_tag import router as task_tag_router
 
 
 # функция для работы с БД
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield
-    await engine.dispose()
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.create_all)
+#     yield
+#     await engine.dispose()
 
 
-app = FastAPI(lifespan=lifespan)
+# app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(user_router)
 app.include_router(task_router)
 app.include_router(tag_router)

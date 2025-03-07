@@ -37,6 +37,7 @@ async def get_tag_pagination_crud(session: AsyncSession, start: int = 0, stop: i
     stmt = (
         select(TagOrm)
         .options(selectinload(TagOrm.tasks))
+        .order_by(TagOrm.id)
         .offset(start)
         .limit(stop - start)
     )

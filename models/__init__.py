@@ -7,6 +7,7 @@ __all__ = (
 )
 from models.base import Base
 from models.user import UserOrm
+
 from models.tag import TagOrm
 from models.task import TaskOrm
 

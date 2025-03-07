@@ -50,6 +50,7 @@ async def get_list_pagination_task_crud(
             # selectinload(TaskOrm.user),
             selectinload(TaskOrm.tags),
         )
+        .order_by(TaskOrm.id)
         .offset(start)
         .limit(stop - start)
     )

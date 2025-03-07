@@ -10,3 +10,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: task
+    #volumes: монтируем локальный каталог ./postgregdata внутрь контейнера для сохранения данных PostgreSQL.
+    volumes:
+    - ./postgresdata:/var/lib/postgresql/data
