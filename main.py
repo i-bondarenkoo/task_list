@@ -8,7 +8,7 @@ from routers.user import router as user_router
 from routers.task import router as task_router
 from routers.tag import router as tag_router
 from routers.task_tag import router as task_tag_router
-
+from demo_auth.demo_jwt_auth import router as auth_router
 
 # функция для работы с БД
 # @asynccontextmanager
@@ -25,6 +25,7 @@ app.include_router(user_router)
 app.include_router(task_router)
 app.include_router(tag_router)
 app.include_router(task_tag_router)
+app.include_router(auth_router)
 
 
 if __name__ == "__main__":

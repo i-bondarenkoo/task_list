@@ -36,3 +36,12 @@ class UpdateUserFull(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+
+
+class UserSchema(BaseModel):
+    username: str
+    password: bytes
+    email: EmailStr | None = None
+    active: bool = True
+
+    model_config = ConfigDict(strict=True)

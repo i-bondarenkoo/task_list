@@ -12,6 +12,7 @@ __all__ = (
     "UpdateUserPartial",
     "UpdateUserFull",
     "ResponseUserWithRelationship",
+    "UserSchema",
 )
 from schemas.tag import (
     CreateTag,
@@ -31,6 +32,7 @@ from schemas.user import (
     UpdateUserPartial,
     UpdateUserFull,
     ResponseUserWithRelationship,
+    UserSchema,
 )
 
 ResponseUserWithRelationship.model_rebuild()
